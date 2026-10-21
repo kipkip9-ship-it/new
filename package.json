@@ -1,0 +1,29 @@
+{
+    "name": "users-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
+        "test": "set NODE_ENV=test&& lab tests",
+        "migrate": "node src/database/migrate.js",
+        "migrate:test": "set NODE_ENV=test&& node src/database/migrate.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "commonjs",
+    "dependencies": {
+        "@hapi/hapi": "^21.4.10",
+        "dotenv": "^18.0.8",
+        "joi": "^18.2.9",
+        "pg": "^8.23.1"
+    },
+    "devDependencies": {
+        "@hapi/code": "^9.0.3",
+        "@hapi/lab": "^26.0.1",
+        "cross-env": "^10.1.0",
+        "nodemon": "^3.1.14"
+    }
+}
