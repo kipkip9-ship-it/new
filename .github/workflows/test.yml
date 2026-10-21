@@ -1,0 +1,54 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: users_api_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Create .env.test
+        run: |
+          cat > .env.test <<EOF
+          PORT=3001
+          HOST=localhost
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_NAME=users_api_test
+          DB_USER=postgres
+          DB_PASSWORD=postgres
+          DB_SSL=false
+          EOF
+
+      - name: Run migrations on test DB
+        run: npm run migrate:test
+
+      - name: Run tests
+        run: npm test
