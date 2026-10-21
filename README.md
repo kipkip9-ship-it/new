@@ -1,3 +1,5 @@
+![test](https://github.com/kipkip9-ship-it/users-api/actions/workflows/test.yml/badge.svg)
+
 # users-api
 
 A REST API for users, departments, and tasks built with Node.js, hapi, and PostgreSQL.
