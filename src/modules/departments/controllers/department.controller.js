@@ -47,15 +47,27 @@ class DepartmentController {
     }
 
     async update(request) {
-        const department = await this.departmentService.update(
-            Number(request.params.id),
-            request.payload
-        );
+        try {
+            const department = await this.departmentService.update(
+                Number(request.params.id),
+                request.payload
+            );
 
-        return {
-            status: 'success',
-            data: department,
-        };
+            return {
+                status: 'success',
+                data: department,
+            };
+        } catch (error) {
+            if (error.isBoom) {
+                throw error;
+            }
+
+            if (error.code === '23505') {
+                throw Boom.conflict('A department with this name already exists');
+            }
+
+            throw error;
+        }
     }
 
     async delete(request, h) {

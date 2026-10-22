@@ -272,15 +272,15 @@ experiment('Department update (DB)', () => {
         expect(response.result.data.name).to.equal('Renamed');
     });
 
-    test('PUT /api/departments/{id} updates the description (200)', async() => {
-        const dept = await seedDepartment('Described');
+    test('PUT /api/departments/{id} with duplicate name returns 409', async() => {
+        await seedDepartment('Taken');
+        const dept = await seedDepartment('Available');
 
         const response = await inject('PUT', `/api/departments/${dept.id}`, {
-            description: 'New description',
+            name: 'Taken',
         });
 
-        expect(response.statusCode).to.equal(200);
-        expect(response.result.data.description).to.equal('New description');
+        expect(response.statusCode).to.equal(409);
     });
 });
 
